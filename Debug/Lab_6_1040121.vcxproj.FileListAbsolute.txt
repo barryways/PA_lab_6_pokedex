@@ -1,0 +1,2 @@
+C:\Users\cdbarrientos\source\PA_lab_6_pokedex\Debug\Lab_6_1040121.vcxproj.AssemblyReference.cache
+C:\Users\cdbarrientos\source\PA_lab_6_pokedex\Debug\Lab_6_1040121.exe
