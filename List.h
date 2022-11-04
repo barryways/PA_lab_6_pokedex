@@ -7,13 +7,18 @@ public:
 	Pokemon^ head;
 	Pokemon^ tail;
 
-	void Add(int national_Number, String^ name_pokemon, int generation_pokemon);
+	int size;
+	void Add(String^ name_pokemon, int national_Number, int generation_pokemon);
+	bool AddAt(String^ nombre, int Numero, int generacion, int index);
 	int Count();
 	int GetNationalNumber(int index);
 	String^ GetNamePokemon(int index);
 	int GetGeneration(int index);
-	void RemoveAtStart();
-	void RemoveAtEnd();
-	void RemoveAt(int index);
+	bool Delete(int value);
+	bool DeleteIndex(int index);
+	int Search(int value);
 	bool IsEmpty();
+	String^ Print();
+	String^ PrintWithCommas();
+	bool IsSorted();
 };

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "List.h"
 
-void Lista::Add(int national_Number, String^ name_pokemon, int generation_pokemon) {
+void Lista::Add(String^ name_pokemon, int national_Number, int generation_pokemon) {
 	Pokemon^ nuevo = gcnew Pokemon();
 	nuevo->nationalNumber = national_Number;
 	nuevo->nombre = name_pokemon;
@@ -14,6 +14,32 @@ void Lista::Add(int national_Number, String^ name_pokemon, int generation_pokemo
 		tail->next = nuevo;
 		tail = nuevo;
 	}
+	size++;
+}
+
+bool Lista::AddAt(String^ nombre, int Numero, int generacion, int index)
+{
+	if (head == nullptr || index == 0)
+	{
+		Add(nombre, Numero, generacion);
+		return true;
+	}
+	int i = 0;
+	Pokemon^ Current = head;
+	while (i < (index - 1) && Current != nullptr)
+	{
+		Current = Current->next;
+		i++;
+	}
+	if (Current == nullptr)
+		return false;
+	Pokemon^ New = gcnew Pokemon();
+	New->nombre = nombre;
+	New->nationalNumber = Numero;
+	New->generacion = generacion;
+	New->next = Current->next;
+	Current->next = New;
+	size++;
 }
 
 int Lista::GetNationalNumber(int index) {
@@ -63,81 +89,17 @@ int Lista::GetGeneration(int index) {
 	}
 }
 
-void Lista::RemoveAtStart() {
-	Pokemon^ temporal = head;
-	if (!IsEmpty())
-	{
-		head = head->next;
-		if (Count() == 1)
-		{
-			tail = head;
-		}
-	}
-}
-
-void Lista::RemoveAtEnd() {
-	Pokemon^ temporal = tail;
-	if (!IsEmpty())
-	{
-		if (Count() == 1)
-		{
-			tail = tail->next;
-			head = tail;
-		}
-		else {
-			Pokemon^ anterior = head;
-			temporal = anterior->next;
-			while (temporal != tail)
-			{
-				anterior = temporal;
-				temporal = temporal->next;
-			}
-			anterior->next = temporal->next;
-			tail = anterior;
-		}
-	}
-}
-
-void Lista::RemoveAt(int index) {
-	Pokemon^ temporal = head;
-	if (!IsEmpty())
-	{
-		if (Count() == 1 || index == 0)
-		{
-			RemoveAtStart();
-		}
-		else {
-			if (index >= Count())
-			{
-				RemoveAtEnd();
-			}
-			else {
-				Pokemon^ anterior = head;
-				temporal = anterior->next;
-				int pos = 1;
-				while (temporal != tail && pos < index)
-				{
-					anterior = temporal;
-					temporal = temporal->next;
-					pos++;
-				}
-				anterior->next = temporal->next;
-			}
-		}
-	}
-}
-
-bool Lista::IsEmpty() {//Verifica si la lista esta vacía
+bool Lista::IsEmpty() {
 	if (head == nullptr)
 	{
-		return true;//Si la cabeza apunta a null, la lista esta vacía
+		return true;
 	}
 	else {
 		return false;
 	}
 }
 
-int Lista::Count() {//Cuenta la cantidad de elementos en la lista
+int Lista::Count() {
 	int cantidad = 0;
 	for (Pokemon^ i = head; i != nullptr; i = i->next)
 	{
@@ -153,6 +115,51 @@ bool Lista::Delete(int value)
 		return false;
 	return DeleteIndex(index);
 }
+
+String^ Lista::Print()
+{
+	String^ res = nullptr;
+	Pokemon^ Current;
+	Current = head;
+	while (Current != nullptr)
+	{
+		res += Current->nombre + "\t" + Current->nationalNumber.ToString() + "\t" + Current->generacion.ToString() + "\n";
+		Current = Current->next;
+	}
+	return res;
+}
+
+
+String^ Lista::PrintWithCommas()
+{
+	String^ res = nullptr;
+	Pokemon^ Current;
+	Current = head;
+	while (Current != nullptr)
+	{
+		res += Current->nombre + "," + Current->nationalNumber.ToString() + "," + Current->generacion.ToString() + "\n";
+		Current = Current->next;
+	}
+	return res;
+}
+
+
+
+int Lista::Search(int numero)
+{
+	int index = 0;
+	Pokemon^ Current = head;
+	while (Current->nationalNumber != numero && Current != nullptr)
+	{
+		Current = Current->next;
+		index++;
+	}
+	if (Current == nullptr)
+		return -1;
+	else
+		return index;
+}
+
 bool Lista::DeleteIndex(int index)
 {
 	if (index == 0)
@@ -176,6 +183,18 @@ bool Lista::DeleteIndex(int index)
 		delete  ToDelete;
 
 	}
-	length--;
+	size--;
 	return true;
+}
+bool Lista::IsSorted()
+{
+	bool Sorted = true;
+	Pokemon^ Current = head;
+	while (Current != nullptr && Current->next != nullptr)
+	{
+		if (Current->nationalNumber >= Current->next->nationalNumber)
+			Sorted = false;
+		Current = Current->next;
+	}
+	return Sorted;
 }
